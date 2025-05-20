@@ -2,6 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+public class Entry
+{
+    public string Date { get; set; }
+    public string PromptText { get; set; }
+    public string EntryText { get; set; }
+
+    public Entry(string date, string promptText, string entryText)
+    {
+        Date = date;
+        PromptText = promptText;
+        EntryText = entryText;
+    }
+
+    public void Display()
+    {
+        Console.WriteLine($"Date: {Date}");
+        Console.WriteLine($"Prompt: {PromptText}");
+        Console.WriteLine($"Entry: {EntryText}");
+        Console.WriteLine();
+    }
+}
+
 public class Journal
 {
     private List<Entry> _entries = new List<Entry>();
@@ -21,7 +43,7 @@ public class Journal
 
         foreach (Entry entry in _entries)
         {
-            entry.Display(); 
+            entry.Display();
         }
     }
 
@@ -55,7 +77,7 @@ public class Journal
                 return;
             }
 
-            _entries.Clear(); 
+            _entries.Clear();
             using (StreamReader reader = new StreamReader(filename))
             {
                 int count = int.Parse(reader.ReadLine());
@@ -65,13 +87,12 @@ public class Journal
                     string[] parts = line.Split('|');
                     if (parts.Length == 3)
                     {
-                         _entries.Add(new Entry(parts[0], parts[1], parts[2]));
+                        _entries.Add(new Entry(parts[0], parts[1], parts[2]));
                     }
                     else
                     {
-                         Console.WriteLine($"Skipping invalid entry at line {i + 1}");
+                        Console.WriteLine($"Skipping invalid entry at line {i + 1}");
                     }
-                   
                 }
             }
             Console.WriteLine("Journal loaded from file: " + filename);
@@ -82,8 +103,8 @@ public class Journal
         }
         catch (FormatException e)
         {
-             Console.WriteLine($"Error reading file format. A new journal will be created. Error Details: {e.Message}");
-             _entries.Clear();
+            Console.WriteLine($"Error reading file format. A new journal will be created. Error Details: {e.Message}");
+            _entries.Clear();
         }
         catch (Exception e)
         {
