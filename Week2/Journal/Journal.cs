@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+// Clase para representar una entrada del diario
 public class Entry
 {
+    // Propiedades de la entrada
     public string Date { get; set; }
     public string PromptText { get; set; }
     public string EntryText { get; set; }
 
+    // Constructor de la clase Entry
     public Entry(string date, string promptText, string entryText)
     {
         Date = date;
@@ -16,6 +19,7 @@ public class Entry
         EntryText = entryText;
     }
 
+    // Método para mostrar la entrada
     public void Display()
     {
         Console.WriteLine($"Date: {Date}");
@@ -25,15 +29,19 @@ public class Entry
     }
 }
 
+// Clase para gestionar el diario
 public class Journal
 {
+    // Lista para almacenar las entradas del diario
     private List<Entry> _entries = new List<Entry>();
 
+    // Método para agregar una nueva entrada al diario
     public void AddEntry(Entry newEntry)
     {
         _entries.Add(newEntry);
     }
 
+    // Método para mostrar todas las entradas del diario
     public void DisplayAll()
     {
         if (_entries.Count == 0)
@@ -45,20 +53,23 @@ public class Journal
         Console.WriteLine("Journal Entries:");
         foreach (Entry entry in _entries)
         {
-            entry.Display();
+            entry.Display(); // Llama al método Display de la clase Entry
         }
     }
 
+    // Método para guardar el diario en un archivo
     public void SaveToFile(string filename)
     {
         try
         {
             using (StreamWriter writer = new StreamWriter(filename))
             {
+                // Escribe el número de entradas
                 writer.WriteLine(_entries.Count);
                 
                 foreach (Entry entry in _entries)
                 {
+                    // Guarda cada entrada en el formato: Fecha|Consigna|Texto de la entrada
                     writer.WriteLine($"{entry.Date}|{entry.PromptText}|{entry.EntryText}");
                 }
             }
@@ -70,6 +81,7 @@ public class Journal
         }
     }
 
+    // Método para cargar el diario desde un archivo
     public void LoadFromFile(string filename)
     {
         try
@@ -80,17 +92,20 @@ public class Journal
                 return;
             }
 
-            _entries.Clear();
+            _entries.Clear(); // Limpia la lista de entradas actual
 
             using (StreamReader reader = new StreamReader(filename))
             {
+                // Lee el número de entradas
                 int entryCount = int.Parse(reader.ReadLine());
 
                 for (int i = 0; i < entryCount; i++)
                 {
+                    // Lee cada línea y divide los datos usando el separador '|'
                     string line = reader.ReadLine();
                     string[] parts = line.Split('|');
                     
+                    // Asegúrate de que la línea tenga el formato correcto antes de crear una nueva entrada
                     if (parts.Length == 3)
                     {
                         string date = parts[0];
@@ -101,6 +116,7 @@ public class Journal
                     else
                     {
                         Console.WriteLine($"Error reading entry {i + 1} from file. The entry will be skipped.");
+                        // Puedes optar por lanzar una excepción aquí en lugar de omitir la entrada
                     }
                 }
             }
@@ -113,7 +129,7 @@ public class Journal
         catch (FormatException e)
         {
             Console.WriteLine($"Error reading the number of entries or the date format: {e.Message}. A new journal will be created.");
-            _entries.Clear();
+            _entries.Clear(); // Limpia las entradas para evitar datos corruptos
         }
         catch (Exception e)
         {
@@ -123,8 +139,10 @@ public class Journal
     }
 }
 
+// Clase para generar consignas aleatorias
 public class PromptGenerator
 {
+    // Lista de consignas
     private List<string> _prompts = new List<string>
     {
         "What was the best moment of your day?",
@@ -139,6 +157,7 @@ public class PromptGenerator
         "What would you like to remember about today in the future?"
     };
 
+    // Método para obtener una consigna aleatoria
     public string GetRandomPrompt()
     {
         if (_prompts.Count == 0)
@@ -151,16 +170,20 @@ public class PromptGenerator
     }
 }
 
+// Clase principal del programa
 public class Program
 {
+    // Método principal
     public static void Main(string[] args)
     {
         Journal journal = new Journal();
         PromptGenerator promptGenerator = new PromptGenerator();
-        string filename = "journal.txt";
+        string filename = "journal.txt"; // Nombre del archivo para guardar el diario
 
+        // Intenta cargar el diario desde el archivo al inicio
         journal.LoadFromFile(filename);
 
+        // Menú principal del programa
         while (true)
         {
             Console.WriteLine("\nPersonal Journal");
@@ -176,6 +199,7 @@ public class Program
             switch (choice)
             {
                 case "1":
+                    // Crea una nueva entrada
                     string date = DateTime.Now.ToShortDateString();
                     string promptText = promptGenerator.GetRandomPrompt();
                     Console.WriteLine($"Date: {date}");
@@ -186,25 +210,31 @@ public class Program
                     Console.WriteLine("Entry added to journal.");
                     break;
                 case "2":
+                    // Muestra todas las entradas
                     journal.DisplayAll();
                     break;
                 case "3":
+                    // Guarda el diario en un archivo
                     Console.Write("Enter the filename to save the journal: ");
-                    filename = Console.ReadLine();
+                    filename = Console.ReadLine(); // Permite al usuario especificar el nombre del archivo
                     journal.SaveToFile(filename);
                     break;
                 case "4":
+                    // Carga el diario desde un archivo
                     Console.Write("Enter the filename to load the journal from: ");
                     filename = Console.ReadLine();
                     journal.LoadFromFile(filename);
                     break;
                 case "5":
+                    // Sale del programa
                     Console.WriteLine("Thank you for using the Personal Journal. Goodbye!");
                     return;
                 default:
+                    // Opción inválida
                     Console.WriteLine("Invalid option. Please try again.");
                     break;
             }
         }
     }
 }
+
