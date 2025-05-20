@@ -1,0 +1,5 @@
+C:\Users\panol\Music\cse210hw\cse210-hw\Week1\obj\Debug\net8.0\Exercise1.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\panol\Music\cse210hw\cse210-hw\Week1\obj\Debug\net8.0\Exercise1.AssemblyInfoInputs.cache
+C:\Users\panol\Music\cse210hw\cse210-hw\Week1\obj\Debug\net8.0\Exercise1.AssemblyInfo.cs
+C:\Users\panol\Music\cse210hw\cse210-hw\Week1\obj\Debug\net8.0\Exercise1.csproj.CoreCompileInputs.cache
+C:\Users\panol\Music\cse210hw\cse210-hw\Week1\obj\Debug\net8.0\Exercise1.sourcelink.json
